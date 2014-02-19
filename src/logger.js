@@ -18,7 +18,7 @@
 	}
 	// Browser global
 	else {
-		root.Logger = factory();
+		root.LoomLogger = factory();
 	}
 }(this, function () {
 
@@ -349,7 +349,7 @@
 
 function a() {
 	function b() {
-		// var logger = new Logger();
+		// var logger = new LoomLogger();
 		// logger.log('here');
 	}
 	b();
