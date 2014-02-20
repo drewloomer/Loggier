@@ -90,7 +90,7 @@
 			var info = this._getStackInfo();
 
 			// Append the info
-			args = args.concat('[' + info.method + '@' + info.file + ':' + info.line + (info.character !== undefined ? ':' + info.character : '') + ']');
+			args = args.concat(this._buildStackInfoString(info));
 		}
 
 		// Write method based on target
@@ -156,7 +156,7 @@
 		if (this._element) {
 
 			// The method name
-			var methodName = '_element' + method.charAt(0).toUppserCase(),
+			var methodName = '_element' + method.charAt(0).toUpperCase(),
 				defaultMethodName = '_elementLog';
 
 			// If there is no method, revert to default
@@ -179,6 +179,15 @@
 	 */
 	Loggier.prototype._elementLog = function (args) {
 
+		// New element
+		var el = window.document.createElement('div');
+
+		// Set properties
+		el.className = 'log';
+		el.innerHTML = this._buildLogString(args);
+
+		// Add the log
+		this._element.appendChild(el);
 	};
 
 
@@ -225,6 +234,36 @@
 	// Loggier.prototype._elementTable = function (args) {
 
 	// };
+
+
+	/**
+	 * Build a string to log out
+	 * @param {Object} params
+	 * @return {String}
+	 */
+	Loggier.prototype._buildLogString = function (params) {
+
+		var str = '',
+			len = params.length,
+			i = 0;
+
+		for (i; i < len; i+=1) {
+			str += params[i] + ' ';
+		}
+
+		return str.slice(0, -1);
+	};
+
+
+	/**
+	 * Build a string of stack info
+	 * @param {Object} params
+	 * @return {String}
+	 */
+	Loggier.prototype._buildStackInfoString = function (params) {
+
+		return '[' + params.method + '@' + params.file + ':' + params.line + (params.character !== undefined ? ':' + params.character : '') + ']';
+	};
 
 
 	/**

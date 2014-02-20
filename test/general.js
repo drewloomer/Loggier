@@ -30,6 +30,9 @@ describe('General tests.', function () {
 			body = cheerio('<body />');
 
 		// Stub the appendChild method
+		div.appendChild = function (child) { this.append(child); };
+
+		// Stub the insertBefore method
 		body.insertBefore = function () { return div; };
 
 		// Stub of the document

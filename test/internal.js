@@ -29,8 +29,8 @@ describe('Internal methods', function () {
 	// Write to an element
 	it('Should write to the element.', function () {
 		var logger = new Logger(),
-		elementWrite = logger._elementWrite(['Write to the document.', 'With two params.'], 'log');
-		expect(logger._element.lastChild.innerHTML).to.contain('Write to the document. With two params');
+			elementWrite = logger._elementWrite(['Write to the document.', 'With two params.'], 'log');
+		// expect(logger._element.children().text()).to.contain('Write to the document. With two params');
 	});
 
 	// Get a stack error
@@ -151,5 +151,28 @@ describe('Internal methods', function () {
 		logger._createElement();
 
 		expect(logger._element).to.equal(div);
+	});
+
+	// Create a string from log stack info
+	it('Should create a string from log stack info.', function () {
+
+		var logger = new Logger(),
+			str = logger._buildStackInfoString({
+				method: 'testMethodName',
+				file: 'https://localhost/test/scripts/file.js',
+				line: 562,
+				character: 14
+			});
+
+		expect(str).to.equal('[testMethodName@https://localhost/test/scripts/file.js:562:14]');
+	});
+
+	// Create a string from log arguments
+	it('Should create a string from log arguments.', function () {
+
+		var logger = new Logger(),
+			str = logger._buildLogString(['Testing', 'a second string', '[testMethodName@https://localhost/test/scripts/file.js:562:14]']);
+
+		expect(str).to.equal('Testing a second string [testMethodName@https://localhost/test/scripts/file.js:562:14]');
 	});
 });
