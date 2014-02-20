@@ -1,5 +1,9 @@
 // Includes
-var expect = require('chai').expect,
+var chai = require('chai'),
+	expect = chai.expect,
+	sinon = require('sinon'),
+	sinonChai = require('sinon-chai'),
+	cheerio = require('cheerio'),
 	Logger = require('../src/logger');
 
 
@@ -22,11 +26,11 @@ describe('Internal methods', function () {
 		expect(consoleWrite[1]).to.equal('With two params.');
 	});
 
-	// Write to the document
-	// TODO - Write this test when we implement this feature
-	it('Should write to the document.', function () {
-		// var logger = new Logger(),
-		// documentWrite = logger._documentWrite();
+	// Write to an element
+	it('Should write to the element.', function () {
+		var logger = new Logger(),
+		elementWrite = logger._elementWrite(['Write to the document.', 'With two params.'], 'log');
+		expect(logger._element.lastChild.innerHTML).to.contain('Write to the document. With two params');
 	});
 
 	// Get a stack error
@@ -117,5 +121,35 @@ describe('Internal methods', function () {
 		var logger = new Logger(),
 			generateStackTrace = logger._generateStackTrace();
 		expect(generateStackTrace).is.a('string');
+	});
+
+	// Properly create an element
+	it('Should create an element and prepend it to the body.', function () {
+
+		// Elements to stub in
+		var div = cheerio('<div />'),
+			body = cheerio('<body />');
+
+		// Stub the appendChild method
+		body.insertBefore = function () { return div; };
+
+		// Stub of the document
+		var	document = {
+				createElement: sinon.stub().returns(div),
+				body: body
+			};
+
+		// Stub window
+		window = { document: document };
+
+		// New logger
+		var logger = new Logger({
+				target: 'element'
+			});
+
+		// Log to create the element
+		logger._createElement();
+
+		expect(logger._element).to.equal(div);
 	});
 });

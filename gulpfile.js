@@ -10,7 +10,7 @@ var gulp = require('gulp'),
 // Directories
 var source = 'src',
 	tests = 'test',
-	dist = 'dist';
+	dest = 'dist';
 
 
 // Server params

@@ -1,5 +1,8 @@
 // Includes
-var expect = require('chai').expect,
+var chai = require('chai'),
+	expect = chai.expect,
+	sinon = require('sinon'),
+	sinonChai = require('sinon-chai'),
 	cheerio = require('cheerio'),
 	Logger = require('../src/logger');
 
@@ -9,13 +12,44 @@ describe('General tests.', function () {
 
 	// Constructor params
 	it('Should set constructor params properly.', function () {
-		var el = cheerio('<div />'),
+		var el = cheerio('<div></div>'),
 			logger = new Logger({
 				target: 'element',
 				element: el
 			});
 		expect(logger._target).to.equal('element');
 		expect(logger._element).to.equal(el);
+	});
+
+
+	// Generate an element if one is not passed
+	it('Should generate an element if one is not passed.', function () {
+
+		// Elements to stub in
+		var div = cheerio('<div />'),
+			body = cheerio('<body />');
+
+		// Stub the appendChild method
+		body.insertBefore = function () { return div; };
+
+		// Stub of the document
+		var	document = {
+				createElement: sinon.stub().returns(div),
+				body: body
+			};
+
+		// Stub window
+		window = { document: document };
+
+		// New logger
+		var logger = new Logger({
+				target: 'element'
+			});
+
+		// Log to create the element
+		logger.log('Create element?');
+
+		expect(logger._element).to.equal(div);
 	});
 
 

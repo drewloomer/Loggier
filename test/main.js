@@ -1,5 +1,6 @@
 // Includes
-var expect = require('chai').expect,
+var chai = require('chai'),
+	expect = chai.expect,
 	Logger = require('../src/logger');
 
 
