@@ -24,9 +24,21 @@
 
 	/**
 	 * Constructor
+	 * @param {Object} params
 	 */
-	function L () {
-		
+	function L (params) {
+
+		params = params || {};
+
+		// Target
+		if (params.target) {
+			this.setTarget(params.target);
+		}
+
+		// Logging element
+		if (params.element) {
+			this.setElement(params.element);
+		}
 	}
 
 
@@ -48,7 +60,14 @@
 	 * Possible logging targets
 	 * @type {Array}
 	 */
-	L.prototype._targets = ['console', 'document'];
+	L.prototype._targets = ['console', 'element'];
+
+
+	/**
+	 * The element to log to if we're logging to an element
+	 * @type {Mixed}
+	 */
+	L.prototype._element = undefined;
 
 
 	/**
@@ -72,7 +91,7 @@
 			// Append the info
 			args = args.concat('[' + info.method + '@' + info.file + ':' + info.line + (info.character !== undefined ? ':' + info.character : '') + ']');
 		}
-		
+
 		// Write method based on target
 		switch (this._target) {
 			case 'console':
@@ -144,23 +163,26 @@
 
 		// Parse different types of traces
 		if (stack.indexOf('Error') === 0) {
-			return this._getStackInfoChrome(stack);
+			return this._getStackInfoV8(stack);
 		}
 		else if (stack.indexOf('ReferenceError') === 0) {
-			return this._getStackInfoIE(stack);
+			return this._getStackInfoChakra(stack);
 		}
-		// Firefox
+		// TODO: Nitro support
+		// else if (stack.indexOf('ReferenceError') === 0) {
+		// 	return this._getStackInfoChakra(stack);
+		// }
 		else {
-			return this._getStackInfoFirefox(stack);
+			return this._getStackInfoSpiderMonkey(stack);
 		}
 	};
 
 
 	/**
-	 * Get the stack info for Chrome
+	 * Get the stack info for V8
 	 * @param {String} stack
 	 */
-	L.prototype._getStackInfoChrome = function (stack) {
+	L.prototype._getStackInfoV8 = function (stack) {
 
 		var line = stack.split('\n')[5],
 			info = line.match(/(?:at\s)(?:([^\(]{1})(?:\s\()(.*)|()()(.*)|()()(<anonymous>))(\:[0-9]{1,})(\:[0-9]{1,})/);
@@ -185,10 +207,10 @@
 
 
 	/**
-	 * Get the stack info for Firefox
+	 * Get the stack info for SpiderMonkey
 	 * @param {String} stack
 	 */
-	L.prototype._getStackInfoFirefox = function (stack) {
+	L.prototype._getStackInfoSpiderMonkey = function (stack) {
 
 		var line = stack.split('\n')[4],
 			info = line.match(/([^@]{1,}|)(?:@)(.*)(\:[0-9]{1,})/);
@@ -199,7 +221,7 @@
 
 		var	method = info[1] || 'anonymous',
 			file = info[2],
-			lineNumber = info[3].substr(1);
+			lineNumber = parseInt(info[3].substr(1), 10);
 
 		return {
 			method: method,
@@ -211,10 +233,10 @@
 
 
 	/**
-	 * Get the stack info for IE
+	 * Get the stack info for Chakra
 	 * @param {String} stack
 	 */
-	L.prototype._getStackInfoIE = function (stack) {
+	L.prototype._getStackInfoChakra = function (stack) {
 
 		var line = stack.split('\n')[5],
 			info = line.match(/(?:at\s)(?:([^\(]{1})(?:\s\()(.*)|()()(.*)|()()(<anonymous>))(\:[0-9]{1,})(\:[0-9]{1,})/);
@@ -254,7 +276,7 @@
 				error = e;
 			}
 		}
-		
+
 		return error.stack;
 	};
 
@@ -267,6 +289,18 @@
 
 		if (this._targets.indexOf(name) !== -1) {
 			this._target = name;
+		}
+	};
+
+
+	/**
+	 * Set the element
+	 * @param {Object} el
+	 */
+	L.prototype.setElement = function (el) {
+
+		if (this._target === 'element') {
+			this._element = el;
 		}
 	};
 
