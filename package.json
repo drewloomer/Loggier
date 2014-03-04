@@ -12,6 +12,7 @@
     "gulp-open": "~0.2.8",
     "gulp-usemin": "~0.3.1",
     "gulp-mocha": "~0.4.1",
+    "gulp-browserify": "~0.4.6",
     "chai": "~1.9.0",
     "cheerio": "~0.13.1",
     "sinon": "~1.8.2",

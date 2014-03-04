@@ -22,40 +22,6 @@ describe('General tests.', function () {
 	});
 
 
-	// Generate an element if one is not passed
-	it('Should generate an element if one is not passed.', function () {
-
-		// Elements to stub in
-		var div = cheerio('<div />'),
-			body = cheerio('<body />');
-
-		// Stub the appendChild method
-		div.appendChild = function (child) { this.append(child); };
-
-		// Stub the insertBefore method
-		body.insertBefore = function () { return div; };
-
-		// Stub of the document
-		var	document = {
-				createElement: sinon.stub().returns(div),
-				body: body
-			};
-
-		// Stub window
-		window = { document: document };
-
-		// New logger
-		var logger = new Logger({
-				target: 'element'
-			});
-
-		// Log to create the element
-		logger.log('Create element?');
-
-		expect(logger._element).to.equal(div);
-	});
-
-
 	// Enable
 	it('Should enable logging properly.', function () {
 		var logger = new Logger();

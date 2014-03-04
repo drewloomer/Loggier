@@ -4,7 +4,7 @@ var chai = require('chai'),
 	sinon = require('sinon'),
 	sinonChai = require('sinon-chai'),
 	cheerio = require('cheerio'),
-	Logger = require('../src/logger');
+	Logger = require('../src/index');
 
 
 // Internal methods
@@ -165,14 +165,5 @@ describe('Internal methods', function () {
 			});
 
 		expect(str).to.equal('[testMethodName@https://localhost/test/scripts/file.js:562:14]');
-	});
-
-	// Create a string from log arguments
-	it('Should create a string from log arguments.', function () {
-
-		var logger = new Logger(),
-			str = logger._buildLogString(['Testing', 'a second string', '[testMethodName@https://localhost/test/scripts/file.js:562:14]']);
-
-		expect(str).to.equal('Testing a second string [testMethodName@https://localhost/test/scripts/file.js:562:14]');
 	});
 });
