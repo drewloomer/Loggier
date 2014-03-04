@@ -5,142 +5,166 @@
 function ElementTarget (params) {
 
 }
-ElementTarget.prototype.constructor = ElementTarget;
 
 
 /**
- * The element to log to
- * @type {Mixed}
+ * Prototype methods
  */
-ElementTarget.prototype._element = undefined;
+ElementTarget.prototype = {
+
+	/**
+	 * Constructor
+	 * @type {Function}
+	 */
+	constructor: ElementTarget,
 
 
-/**
- * Build a string to log out
- * @param {Object} params
- * @return {String}
- */
-ElementTarget.prototype._buildLogString = function (params) {
-
-	var str = '',
-		len = params.length,
-		i = 0;
-
-	for (i; i < len; i+=1) {
-		str += params[i] + ' ';
-	}
-
-	return str.slice(0, -1);
-};
+	/**
+	 * The element to log to
+	 * @type {Mixed}
+	 */
+	_element: undefined,
 
 
-/**
- * Write a log to an element
- */
-ElementTarget.prototype._log = function () {
+	/**
+	 * Build a string to log out
+	 * @param {Object} params
+	 * @return {String}
+	 */
+	_buildLogString: function (params) {
 
-	// If we don't have an element yet, create one
-	if (!this._element) {
-		this._createElement();
-	}
+		var str = '',
+			len = params.length,
+			i = 0;
 
-	// New element
-	var el = document.createElement('div');
+		for (i; i < len; i+=1) {
+			str += params[i] + ' ';
+		}
 
-	// Set properties
-	el.className = 'log';
-	el.innerHTML = this._buildLogString(arguments);
-
-	// Add the log
-	this._element.appendChild(el);
-};
+		return str.slice(0, -1);
+	},
 
 
-/**
- * Write an error to an element
- * @param {Array} args
- */
-// ElementTarget.prototype._error = function (args) {
+	/**
+	 * Write a log to an element
+	 */
+	_log: function () {
 
-// };
+		// Make sure we have an element
+		if (!this._checkElement()) {
+			return;
+		}
 
+		// New element
+		var el = document.createElement('div');
 
-/**
- * Write a warning to an element
- * @param {Array} args
- */
-// ElementTarget.prototype._warn = function (args) {
+		// Set properties
+		el.className = 'log';
+		el.innerHTML = this._buildLogString(arguments);
 
-// };
-
-
-/**
- * Write info to an element
- * @param {Array} args
- */
-// ElementTarget.prototype._info = function (args) {
-
-// };
+		// Add the log
+		this._element.appendChild(el);
+	},
 
 
-/**
- * Write a debug to an element
- * @param {Array} args
- */
-// ElementTarget.prototype._debug = function (args) {
+	/**
+	 * Write an error to an element
+	 * @param {Array} args
+	 */
+	// _error: function (args) {
 
-// };
-
-
-/**
- * Write a table to an element
- * @param {Array} args
- */
-// ElementTarget.prototype._table = function (args) {
-
-// };
+	// };
 
 
-/**
- * Create an element to write to and try to add it to the body
- */
-ElementTarget.prototype._createElement = function () {
+	/**
+	 * Write a warning to an element
+	 * @param {Array} args
+	 */
+	// _warn: function (args) {
 
-	// If there is no window object, we're SOL
-	if (!document) {
-		return;
-	}
-
-	// Create the element
-	this._element = document.createElement('div');
-
-	// Set element properties
-	this._element.className = 'loggier';
-
-	// Append it to the document
-	document.body.insertBefore(this._element, document.body.firstChild);
-};
+	// };
 
 
-/**
- * Write to the element
- * @param {Array} args
- * @param {String} method
- */
-ElementTarget.prototype.write = function (args, method) {
+	/**
+	 * Write info to an element
+	 * @param {Array} args
+	 */
+	// _info: function (args) {
 
-	// If we don't have an element yet, create one
-	if (!this._element) {
-		this._createElement();
-	}
+	// };
 
 
-	// Make sure there really is an element
-	if (this._element) {
+	/**
+	 * Write a debug to an element
+	 * @param {Array} args
+	 */
+	// _debug: function (args) {
+
+	// };
+
+
+	/**
+	 * Write a table to an element
+	 * @param {Array} args
+	 */
+	// _table: function (args) {
+
+	// };
+
+
+	/**
+	 * Check that there is an element and create if we don't have one
+	 */
+	_checkElement: function () {
+
+		// Return the element if we have it
+		if (this._element) {
+			return this._element;
+		}
+
+		// Try to create
+		return this._createElement();
+	},
+
+
+	/**
+	 * Create an element to write to and try to add it to the body
+	 */
+	_createElement: function () {
+
+		// If there is no window object, we're SOL
+		if (!document) {
+			return;
+		}
+
+		// Create the element
+		this._element = document.createElement('div');
+
+		// Set element properties
+		this._element.className = 'loggier';
+
+		// Append it to the document
+		document.body.insertBefore(this._element, document.body.firstChild);
+
+		return this._element;
+	},
+
+
+	/**
+	 * Write to the element
+	 * @param {Array} args
+	 * @param {String} method
+	 */
+	write: function (args, method) {
+
+		// Make sure we have an element
+		if (!this._checkElement()) {
+			return;
+		}
 
 		// The method name
-		var methodName = '_element' + method.charAt(0).toUpperCase(),
-			defaultMethodName = '_elementLog';
+		var methodName = '_' + method,
+			defaultMethodName = '_log';
 
 		// If there is no method, revert to default
 		if (!this[methodName]) {
@@ -152,17 +176,17 @@ ElementTarget.prototype.write = function (args, method) {
 		this[methodName](args);
 
 		return args;
+	},
+
+
+	/**
+	 * Set the element we'll write to
+	 * @param {Object} el
+	 */
+	setElement: function (el) {
+
+		this._element = el;
 	}
-};
-
-
-/**
- * Set the element we'll write to
- * @param {Object} el
- */
-ElementTarget.prototype.setElement = function (el) {
-
-	this._element = el;
 };
 
 
