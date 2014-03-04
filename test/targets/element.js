@@ -16,7 +16,7 @@ describe('Element target', function () {
 	// Fake the environment
 	beforeEach(function () {
 
-		// // Elements to stub in
+		// Elements to stub in
 		div = cheerio('<div />');
 		body = cheerio('<body />');
 

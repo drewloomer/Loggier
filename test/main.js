@@ -13,9 +13,7 @@ describe('Loggier', function () {
 		targets = {
 			'console': require('./targets/console'),
 			'element': require('./targets/element')
-		};
-	// var general = require('./general'),
-	// 	console = require('./console'),
-	// 	element = require('./element'),
-	// 	internal = require('./internal');
+		},
+		general = require('./general'),
+		internal = require('./internal');
 });

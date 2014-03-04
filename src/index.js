@@ -77,7 +77,7 @@ Loggier.prototype._write = function (args, method) {
 	}
 
 	// Write method based on target
-	this.getTarget().write(args, method);
+	return this.getTarget().write(args, method);
 };
 
 
@@ -98,7 +98,7 @@ Loggier.prototype._buildStackInfoString = function (params) {
  */
 Loggier.prototype.getTarget = function () {
 
-	if (this._targets.hasOwnProperty(this._targetId) !== -1) {
+	if (this._targets.hasOwnProperty(this._targetId)) {
 		return this._targets[this._targetId];
 	}
 };
@@ -110,7 +110,7 @@ Loggier.prototype.getTarget = function () {
  */
 Loggier.prototype.setTarget = function (name) {
 
-	if (this._targets.hasOwnProperty(name) !== -1) {
+	if (this._targets.hasOwnProperty(name)) {
 		this._targetId = name;
 	}
 };
