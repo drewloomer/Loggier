@@ -5,7 +5,15 @@ var gulp = require('gulp'),
 	usemin = require('gulp-usemin'),
 	browserify = require('gulp-browserify'),
 	clean = require('gulp-clean'),
-	mocha = require('gulp-mocha');
+	stylus = require('gulp-stylus'),
+	mocha = require('gulp-mocha'),
+	lr = require('tiny-lr')(),
+	livereload = require('gulp-livereload'),
+	embedlr = require('gulp-embedlr'),
+	open = require('gulp-open'),
+	connect = require('connect'),
+	http = require('http'),
+	through = require('through2');
 
 
 // Directories
@@ -68,25 +76,98 @@ gulp.task('browserify', ['clean', 'test'], function () {
 
 
 // Usemin
-gulp.task('usemin', ['browserify'], function () {
+gulp.task('usemin', ['browserify', 'stylus'], function () {
 
+	console.log('Usemin');
 	gulp.src(source + '/*.html')
-		.pipe(usemin({
-
+		.pipe(usemin())
+		.pipe(embedlr({
+			port: lrPort
 		}))
+		.pipe(gulp.dest(dest))
+		.pipe(livereload(lr));
+});
+
+
+// Usemin build
+gulp.task('usemin-build', ['browserify', 'stylus'], function () {
+
+	console.log('Usemin');
+	gulp.src(source + '/*.html')
+		.pipe(usemin())
 		.pipe(gulp.dest(dest));
 });
 
 
 // Uglify
-gulp.task('uglify', ['browserify'], function () {
+gulp.task('uglify', ['browserify', 'stylus'], function () {
 
+	console.log('Uglify');
 	gulp.src([dest + '/index.js']).pipe(uglify()).pipe(gulp.dest(dest));
 });
 
 
+// Stylus
+gulp.task('stylus', ['clean'], function () {
+
+	console.log('Stylus');
+	gulp.src(source + '/index.styl')
+		.pipe(stylus())
+		.pipe(gulp.dest(dest));
+});
+
+
+// Copy
+gulp.task('copy', ['clean'], function () {
+
+	console.log('Copy');
+	gulp.src([source + '/element-test.js'])
+		.pipe(gulp.dest(dest));
+});
+
+
+// Server setup task
+gulp.task('server-setup', ['default'], function () {
+
+	console.log('Starting server...');
+	connect().use(livereload({
+		port: lrPort
+	}))
+	.use(connect.static(dest))
+	.listen(port);
+});
+
+
+// Server launch task
+gulp.task('server', ['server-setup', 'default'], function () {
+
+	console.log('Opening window...');
+	gulp.src('./package.json')
+		.pipe(open('', {
+			url: 'http://' + host + ':' + port + '/'
+		}));
+});
+
+
 // Development
-gulp.task('default', ['clean', 'test', 'browserify', 'usemin'], function () {
+gulp.task('dev', ['default', 'server'], function () {
+
+	// Livereload server
+	lr.listen(lrPort, function (err) {
+
+		// Stop on error
+		if (err) {
+			return console.log(err);
+		}
+
+		// Watch files
+		gulp.watch(source + '/**', ['default']);
+	});
+});
+
+
+// Default
+gulp.task('default', ['clean', 'test', 'browserify', 'usemin', 'stylus', 'copy'], function () {
 
 	// Stop the server
 	gulp.on('close', function () {
@@ -97,7 +178,7 @@ gulp.task('default', ['clean', 'test', 'browserify', 'usemin'], function () {
 
 
 // Build
-gulp.task('build', ['default', 'uglify'], function () {
+gulp.task('build', ['clean', 'test', 'browserify', 'usemin-build', 'stylus', 'copy', 'uglify'], function () {
 
 	console.log('Building...');
 });

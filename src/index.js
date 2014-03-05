@@ -19,6 +19,16 @@ function Loggier (params) {
 	if (params.element) {
 		this.element(params.element);
 	}
+
+	// Enabled
+	if (params.enabled !== undefined) {
+		this._enabled = params.enabled;
+	}
+
+	// Set a class on the body
+	if (this._enabled) {
+		this.enable();
+	}
 }
 
 
@@ -69,6 +79,13 @@ Loggier.prototype = {
 		'console': new ConsoleTarget(),
 		'element': new ElementTarget()
 	},
+
+
+	/**
+	 * Class name for the body when we're enabled
+	 * @type {String}
+	 */
+	_enabledClassName: 'loggier-enabled',
 
 
 	/**
@@ -126,7 +143,39 @@ Loggier.prototype = {
 	 */
 	_buildStackInfoString: function (params) {
 
+		// console.log(__filename, params);
 		return '(' + params.method + '@' + params.file + ':' + params.line + (params.character !== undefined ? ':' + params.character : '') + ')';
+	},
+
+
+	/**
+	 * Add a class to the body to reflect the enabled state
+	 */
+	_addBodyClass: function () {
+
+		var className = document.body.className,
+			present = className.indexOf(this._enabledClassName);
+
+		if (present === -1) {
+			className = className + ' ' + this._enabledClassName;
+			document.body.className = className.replace(/^\s+|\s+$/g,'');
+		}
+	},
+
+
+	/**
+	 * Remove a class from the body to reflect the disabled state
+	 */
+	_removeBodyClass: function () {
+
+		var className = document.body.className,
+			present = className.indexOf(this._enabledClassName);
+
+		console.log(present);
+		if (present !== -1) {
+			className = className.replace(this._enabledClassName, '', 'gi');
+			document.body.className = className;
+		}
 	},
 
 
@@ -198,6 +247,7 @@ Loggier.prototype = {
 	enable: function () {
 
 		this._enabled = true;
+		this._addBodyClass();
 	},
 
 
@@ -207,6 +257,7 @@ Loggier.prototype = {
 	disable: function () {
 
 		this._enabled = false;
+		this._removeBodyClass();
 	},
 
 

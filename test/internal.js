@@ -31,4 +31,18 @@ describe('Internal methods', function () {
 
 		expect(str).to.equal('(testMethodName@https://localhost/test/scripts/file.js:562:14)');
 	});
+
+	// Add a class to the body
+	it('Should add the enabled class to the body.', function () {
+		var loggier = new Loggier();
+		loggier._addBodyClass();
+		expect(document.body.className).to.contain('loggier-enabled');
+	});
+
+	// Remove a class from the body
+	it('Should remove the enabled class from the body.', function () {
+		var loggier = new Loggier();
+		loggier._removeBodyClass();
+		expect(document.body.className).to.not.contain('loggier-enabled');
+	});
 });

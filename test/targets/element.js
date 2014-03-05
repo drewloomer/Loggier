@@ -29,7 +29,7 @@ describe('Element target', function () {
 		// Stub of the document
 		document = {
 			createElement: function (name) {
-				var el = cheerio('<' + name + ' />');
+				var el = cheerio('<' + name + '></' + name + '>');
 				el.appendChild = function (child) { child.html(child.innerHTML); this.append(child); };
 				el.html = function (html) { if (html) { return cheerio.prototype.html.apply(this, arguments); } return this.innerHTML || cheerio.prototype.html.apply(this); };
 				return el;
@@ -108,54 +108,54 @@ describe('Element target', function () {
 	// Log
 	it('Should return a properly formatted document log.', function () {
 
-		var elementTarget = new ElementTarget();
-		elementTarget._log('A document log. (anonymous@Context.');
-		expect(elementTarget._element.html()).to.contain('A document log. (anonymous@Context.');
-		expect(elementTarget._element.className).to.contain('log');
+		var elementTarget = new ElementTarget(),
+			log = elementTarget._log('A document log. (anonymous@Context.');
+		expect(log.html()).to.contain('A document log. (anonymous@Context.');
+		expect(log.className).to.contain('log');
 	});
 
 	// Error
 	it('Should return a properly formatted document error log.', function () {
 
-		var elementTarget = new ElementTarget();
-		elementTarget._error('A document log. (anonymous@Context.');
-		expect(elementTarget._element.html()).to.contain('A document log. (anonymous@Context.');
-		expect(elementTarget._element.className).to.contain('error');
+		var elementTarget = new ElementTarget(),
+			log = elementTarget._error('A document log. (anonymous@Context.');
+		expect(log.html()).to.contain('A document log. (anonymous@Context.');
+		expect(log.className).to.contain('error');
 	});
 
 	// Warn
 	it('Should return a properly formatted document warn log.', function () {
 
-		var elementTarget = new ElementTarget();
-		elementTarget._warn('A document log. (anonymous@Context.');
-		expect(elementTarget._element.html()).to.contain('A document log. (anonymous@Context.');
-		expect(elementTarget._element.className).to.contain('warn');
+		var elementTarget = new ElementTarget(),
+			log = elementTarget._warn('A document log. (anonymous@Context.');
+		expect(log.html()).to.contain('A document log. (anonymous@Context.');
+		expect(log.className).to.contain('warn');
 	});
 
 	// Info
 	it('Should return a properly formatted document info log.', function () {
 
-		var elementTarget = new ElementTarget();
-		elementTarget._info('A document log. (anonymous@Context.');
-		expect(elementTarget._element.html()).to.contain('A document log. (anonymous@Context.');
-		expect(elementTarget._element.className).to.contain('info');
+		var elementTarget = new ElementTarget(),
+			log = elementTarget._info('A document log. (anonymous@Context.');
+		expect(log.html()).to.contain('A document log. (anonymous@Context.');
+		expect(log.className).to.contain('info');
 	});
 
 	// Debug
 	it('Should return a properly formatted document debug log.', function () {
 
-		var elementTarget = new ElementTarget();
-		elementTarget._debug('A document log. (anonymous@Context.');
-		expect(elementTarget._element.html()).to.contain('A document log. (anonymous@Context.');
-		expect(elementTarget._element.className).to.contain('debug');
+		var elementTarget = new ElementTarget(),
+			log = elementTarget._debug('A document log. (anonymous@Context.');
+		expect(log.html()).to.contain('A document log. (anonymous@Context.');
+		expect(log.className).to.contain('debug');
 	});
 
 	// Table
 	it('Should return a properly formatted document table log.', function () {
 
-		var elementTarget = new ElementTarget();
-		elementTarget._table('A document log. (anonymous@Context.');
-		expect(elementTarget._element.html()).to.contain('A document log. (anonymous@Context.');
-		expect(elementTarget._element.className).to.contain('table');
+		var elementTarget = new ElementTarget(),
+			log = elementTarget._table('A document log. (anonymous@Context.');
+		expect(log.html()).to.contain('A document log. (anonymous@Context.');
+		expect(log.className).to.contain('table');
 	});
 });
