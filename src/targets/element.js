@@ -27,6 +27,119 @@ ElementTarget.prototype = {
 
 
 	/**
+	 * Build a content element
+	 * @param {Mixed} content
+	 * @param {Object} params
+	 */
+	_buildContent: function (content, params) {
+
+		params = params || {};
+
+		// New element
+		var el,
+			className = params.className || 'content',
+			type = typeof content;
+
+		//
+		switch (type) {
+			case 'object':
+				el = this._buildObjectContent(content);
+				break;
+			default:
+				el = document.createElement('span');
+				el.innerHTML = content;
+				break;
+		}
+
+		// Set the class name
+		el.className = className + ' ' + type;
+
+		return el;
+	},
+
+
+	/**
+	 * Build a content element from a hash
+	 * @param {Object} obj
+	 */
+	_buildObjectContent: function (obj) {
+
+		var el = document.createElement('span'),
+			has = Object.prototype.hasOwnProperty,
+			key;
+
+		// Loop
+		for (key in obj) {
+
+			// Make sure we don't bother with the prototype
+			if (has.call(obj, key)) {
+				el.appendChild(this._buildObjectContentRow(obj[key], key));
+			}
+		}
+
+		el.className = 'object';
+
+		return el;
+	},
+
+
+	/**
+	 * Build a row of object content
+	 * @param {Mixed} value
+	 * @param {Mixed} key
+	 */
+	_buildObjectContentRow: function (value, key) {
+
+		var el = document.createElement('span');
+
+		el.appendChild(this._buildObjectContentKey(key));
+		el.appendChild(this._buildObjectContentValue(value));
+
+		el.className = 'row';
+
+		return el;
+	},
+
+
+	/**
+	 * Build a content key element
+	 * @param {Mixed} key
+	 */
+	_buildObjectContentKey: function (key) {
+
+		var el = document.createElement('span');
+		el.innerHTML = key;
+		el.className = 'key';
+		return el;
+	},
+
+
+	/**
+	 * Build a content value element
+	 * @param {Mixed} value
+	 */
+	_buildObjectContentValue: function (value) {
+
+		var el,
+			type = typeof value;
+
+		switch (type) {
+			case 'object':
+				el = this._buildObjectContent(value);
+				break;
+			default:
+				el = document.createElement('span');
+				el.innerHTML = value;
+				break;
+		}
+
+		el.className = type;
+
+		return el;
+	},
+
+
+	/**
 	 * Write a log to an element
 	 */
 	_log: function () {
@@ -38,7 +151,6 @@ ElementTarget.prototype = {
 
 		// New elements
 		var el = document.createElement('div'),
-			contents = [],
 			info = document.createElement('span');
 
 		// Last param is the stack info
@@ -47,10 +159,7 @@ ElementTarget.prototype = {
 
 		// Content string
 		for (var i = 0; i < params.length; i+=1) {
-			contents[i] = document.createElement('span');
-			contents[i].className = 'content';
-			contents[i].innerHTML = params[i];
-			el.appendChild(contents[i]);
+			el.appendChild(this._buildContent(params[i]));
 		}
 
 		// Info string
