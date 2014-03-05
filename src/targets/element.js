@@ -27,25 +27,6 @@ ElementTarget.prototype = {
 
 
 	/**
-	 * Build a string to log out
-	 * @param {Object} params
-	 * @return {String}
-	 */
-	_buildLogString: function (params) {
-
-		var str = '',
-			len = params.length,
-			i = 0;
-
-		for (i; i < len; i+=1) {
-			str += params[i] + ' ';
-		}
-
-		return str.slice(0, -1);
-	},
-
-
-	/**
 	 * Write a log to an element
 	 */
 	_log: function () {
@@ -55,15 +36,35 @@ ElementTarget.prototype = {
 			return;
 		}
 
-		// New element
-		var el = document.createElement('div');
+		// New elements
+		var el = document.createElement('div'),
+			contents = [],
+			info = document.createElement('span');
 
-		// Set properties
+		// Last param is the stack info
+		var params = arguments,
+			stackInfo = Array.prototype.pop.call(params);
+
+		// Content string
+		for (var i = 0; i < params.length; i+=1) {
+			contents[i] = document.createElement('span');
+			contents[i].className = 'content';
+			contents[i].innerHTML = params[i];
+			el.appendChild(contents[i]);
+		}
+
+		// Info string
+		info.innerHTML = stackInfo;
+		info.className = 'info';
+
+		// Add children to the element
+		el.appendChild(info);
+
+		// Add the element
 		el.className = 'log';
-		el.innerHTML = this._buildLogString(arguments);
-
-		// Add the log
 		this._element.appendChild(el);
+
+		return el;
 	},
 
 
@@ -71,22 +72,13 @@ ElementTarget.prototype = {
 	 * Write an error to an element
 	 * @param {Array} args
 	 */
-	_error: function (args) {
+	_error: function () {
 
-		// Make sure we have an element
-		if (!this._checkElement()) {
-			return;
-		}
+		var el = this._log.apply(this, arguments);
 
-		// New element
-		var el = document.createElement('div');
-
-		// Set properties
 		el.className = 'log error';
-		el.innerHTML = this._buildLogString(arguments);
 
-		// Add the log
-		this._element.appendChild(el);
+		return el;
 	},
 
 
@@ -94,22 +86,13 @@ ElementTarget.prototype = {
 	 * Write a warning to an element
 	 * @param {Array} args
 	 */
-	_warn: function (args) {
+	_warn: function () {
 
-		// Make sure we have an element
-		if (!this._checkElement()) {
-			return;
-		}
+		var el = this._log.apply(this, arguments);
 
-		// New element
-		var el = document.createElement('div');
-
-		// Set properties
 		el.className = 'log warn';
-		el.innerHTML = this._buildLogString(arguments);
 
-		// Add the log
-		this._element.appendChild(el);
+		return el;
 	},
 
 
@@ -117,22 +100,13 @@ ElementTarget.prototype = {
 	 * Write info to an element
 	 * @param {Array} args
 	 */
-	_info: function (args) {
+	_info: function () {
 
-		// Make sure we have an element
-		if (!this._checkElement()) {
-			return;
-		}
+		var el = this._log.apply(this, arguments);
 
-		// New element
-		var el = document.createElement('div');
-
-		// Set properties
 		el.className = 'log info';
-		el.innerHTML = this._buildLogString(arguments);
 
-		// Add the log
-		this._element.appendChild(el);
+		return el;
 	},
 
 
@@ -140,22 +114,13 @@ ElementTarget.prototype = {
 	 * Write a debug to an element
 	 * @param {Array} args
 	 */
-	_debug: function (args) {
+	_debug: function () {
 
-		// Make sure we have an element
-		if (!this._checkElement()) {
-			return;
-		}
+		var el = this._log.apply(this, arguments);
 
-		// New element
-		var el = document.createElement('div');
-
-		// Set properties
 		el.className = 'log debug';
-		el.innerHTML = this._buildLogString(arguments);
 
-		// Add the log
-		this._element.appendChild(el);
+		return el;
 	},
 
 
@@ -163,22 +128,13 @@ ElementTarget.prototype = {
 	 * Write a table to an element
 	 * @param {Array} args
 	 */
-	_table: function (args) {
+	_table: function () {
 
-		// Make sure we have an element
-		if (!this._checkElement()) {
-			return;
-		}
+		var el = this._log.apply(this, arguments);
 
-		// New element
-		var el = document.createElement('div');
-
-		// Set properties
 		el.className = 'log table';
-		el.innerHTML = this._buildLogString(arguments);
 
-		// Add the log
-		this._element.appendChild(el);
+		return el;
 	},
 
 
@@ -238,12 +194,11 @@ ElementTarget.prototype = {
 
 		// If there is no method, revert to default
 		if (!this[methodName]) {
-
 			methodName = defaultMethodName;
 		}
 
 		// Call the method
-		this[methodName](args);
+		this[methodName].apply(this, args);
 
 		return args;
 	},

@@ -39,15 +39,6 @@ describe('Element target', function () {
 		delete document;
 	});
 
-	// Create a string from log arguments
-	it('Should create a string from log arguments.', function () {
-
-		var elementTarget = new ElementTarget(),
-			str = elementTarget._buildLogString(['Testing', 'a second string', '[testMethodName@https://localhost/test/scripts/file.js:562:14]']);
-
-		expect(str).to.equal('Testing a second string [testMethodName@https://localhost/test/scripts/file.js:562:14]');
-	});
-
 	// Generate an element if one is not passed
 	it('Should generate an element if one is not passed.', function () {
 
@@ -93,7 +84,7 @@ describe('Element target', function () {
 	it('Should write to the an element.', function () {
 
 		var elementTarget = new ElementTarget();
-		elementTarget.write('A document log. [anonymous@Context.', 'log');
+		elementTarget.write(['A document log. [anonymous@Context.'], 'log');
 		expect(elementTarget._element.innerHTML).to.contain('A document log. [anonymous@Context.');
 	});
 

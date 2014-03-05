@@ -111,7 +111,7 @@ Loggier.prototype = {
 			var info = this._stackParser.getInfo();
 
 			// Append the info
-			args = args.concat(this._buildStackInfoString(info));
+			args.push(this._buildStackInfoString(info));
 		}
 
 		// Write method based on target
