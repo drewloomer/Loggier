@@ -23,6 +23,19 @@ function Loggier (params) {
 
 
 /**
+ * Log levels
+ * @type {Array}
+ */
+var logLevels = {
+		'error': 1,
+		'warn': 2,
+		'debug': 4,
+		'info': 8,
+		'log': 16
+	};
+
+
+/**
  * Prototype methods
  */
 Loggier.prototype = {
@@ -66,6 +79,20 @@ Loggier.prototype = {
 
 
 	/**
+	 * Log levels
+	 * @type {Object}
+	 */
+	_logLevels: logLevels,
+
+
+	/**
+	 * The current log level
+	 * @type {Number}
+	 */
+	_logLevel: logLevels.error | logLevels.warn | logLevels.debug | logLevels.log | logLevels.info,
+
+
+	/**
 	 * Does the actual writing
 	 * @param {Array} args
 	 * @param {String} method
@@ -73,7 +100,7 @@ Loggier.prototype = {
 	_write: function (args, method) {
 
 		// Don't log if we're not enabled
-		if (!this._enabled) {
+		if (!this._enabled || !(this._logLevel & (this._logLevels[method] || this._logLevels['log']))) {
 			return;
 		}
 
@@ -136,6 +163,34 @@ Loggier.prototype = {
 		if (this._targetId === 'element') {
 			this.getTarget().setElement(el);
 		}
+	},
+
+
+	/**
+	 * Set or get the log level
+	 * @param {String} levelName
+	 */
+	logLevel: function (levelName) {
+
+		// Get the level
+		if (levelName === undefined) {
+			return this._logLevel;
+		}
+
+
+		// Set the level
+		var key,
+			level = this._logLevels[levelName],
+			mask = 0,
+			curLevel;
+		for (key in this._logLevels) {
+			curLevel = this._logLevels[key];
+			if (curLevel <= level) {
+				mask = mask | curLevel;
+			}
+		}
+
+		return this._logLevel = level;
 	},
 
 

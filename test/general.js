@@ -96,6 +96,34 @@ describe('General tests.', function () {
 	});
 
 
+	// Getting the log level
+	it('Should get the log level.', function () {
+		var loggier = new Loggier(),
+			level = loggier.logLevel();
+		expect(level).to.equal(31);
+	});
+
+
+	// Setting the log level
+	it('Should set the log level.', function () {
+		var loggier = new Loggier(),
+			level = loggier.logLevel('error');
+		expect(level).to.equal(1);
+	});
+
+
+	// Respecting the log level
+	it('Should respect the log level.', function () {
+		var loggier = new Loggier(),
+			level = loggier.logLevel('error'),
+			log = loggier.log('Test log.');
+		expect(log).to.equal(undefined);
+		loggier.logLevel('log');
+		log = loggier.log('Test log.');
+		expect(log[0]).to.equal('Test log.');
+	});
+
+
 	// Logging types
 	describe('Log types.', function () {
 
