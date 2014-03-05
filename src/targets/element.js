@@ -71,45 +71,115 @@ ElementTarget.prototype = {
 	 * Write an error to an element
 	 * @param {Array} args
 	 */
-	// _error: function (args) {
+	_error: function (args) {
 
-	// };
+		// Make sure we have an element
+		if (!this._checkElement()) {
+			return;
+		}
+
+		// New element
+		var el = document.createElement('div');
+
+		// Set properties
+		el.className = 'log error';
+		el.innerHTML = this._buildLogString(arguments);
+
+		// Add the log
+		this._element.appendChild(el);
+	},
 
 
 	/**
 	 * Write a warning to an element
 	 * @param {Array} args
 	 */
-	// _warn: function (args) {
+	_warn: function (args) {
 
-	// };
+		// Make sure we have an element
+		if (!this._checkElement()) {
+			return;
+		}
+
+		// New element
+		var el = document.createElement('div');
+
+		// Set properties
+		el.className = 'log warn';
+		el.innerHTML = this._buildLogString(arguments);
+
+		// Add the log
+		this._element.appendChild(el);
+	},
 
 
 	/**
 	 * Write info to an element
 	 * @param {Array} args
 	 */
-	// _info: function (args) {
+	_info: function (args) {
 
-	// };
+		// Make sure we have an element
+		if (!this._checkElement()) {
+			return;
+		}
+
+		// New element
+		var el = document.createElement('div');
+
+		// Set properties
+		el.className = 'log info';
+		el.innerHTML = this._buildLogString(arguments);
+
+		// Add the log
+		this._element.appendChild(el);
+	},
 
 
 	/**
 	 * Write a debug to an element
 	 * @param {Array} args
 	 */
-	// _debug: function (args) {
+	_debug: function (args) {
 
-	// };
+		// Make sure we have an element
+		if (!this._checkElement()) {
+			return;
+		}
+
+		// New element
+		var el = document.createElement('div');
+
+		// Set properties
+		el.className = 'log debug';
+		el.innerHTML = this._buildLogString(arguments);
+
+		// Add the log
+		this._element.appendChild(el);
+	},
 
 
 	/**
 	 * Write a table to an element
 	 * @param {Array} args
 	 */
-	// _table: function (args) {
+	_table: function (args) {
 
-	// };
+		// Make sure we have an element
+		if (!this._checkElement()) {
+			return;
+		}
+
+		// New element
+		var el = document.createElement('div');
+
+		// Set properties
+		el.className = 'log table';
+		el.innerHTML = this._buildLogString(arguments);
+
+		// Add the log
+		this._element.appendChild(el);
+	},
 
 
 	/**
@@ -183,9 +253,13 @@ ElementTarget.prototype = {
 	 * Set the element we'll write to
 	 * @param {Object} el
 	 */
-	setElement: function (el) {
+	element: function (el) {
 
-		this._element = el;
+		if (el !== undefined) {
+			this._element = el;
+		}
+
+		return this._element;
 	}
 };
 

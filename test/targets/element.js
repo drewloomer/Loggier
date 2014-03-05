@@ -85,7 +85,7 @@ describe('Element target', function () {
 	it('Should set the logging element.', function () {
 		var el = cheerio('<div />'),
 			elementTarget = new ElementTarget();
-		elementTarget.setElement(el);
+		elementTarget.element(el);
 		expect(elementTarget._element).to.equal(el);
 	});
 
@@ -103,50 +103,51 @@ describe('Element target', function () {
 		var elementTarget = new ElementTarget();
 		elementTarget._log('A document log. [anonymous@Context.');
 		expect(elementTarget._element.innerHTML).to.contain('A document log. [anonymous@Context.');
+		expect(elementTarget._element.className).to.contain('log');
 	});
 
-	/*// Error
-	it('Should return a properly formatted document error.', function () {
-		var elementTarget = new ElementTarget({
-				target: 'document'
-			}),
-			error = elementTarget.error('A document error. [anonymous@Context.');
-		// expect(error).to.contain('A document error. [anonymous@Context.');
+	// Error
+	it('Should return a properly formatted document error log.', function () {
+
+		var elementTarget = new ElementTarget();
+		elementTarget._error('A document log. [anonymous@Context.');
+		expect(elementTarget._element.innerHTML).to.contain('A document log. [anonymous@Context.');
+		expect(elementTarget._element.className).to.contain('error');
 	});
 
 	// Warn
-	it('Should return a properly formatted document warn.', function () {
-		var elementTarget = new ElementTarget({
-				target: 'document'
-			}),
-			warn = elementTarget.warn('A document warn. [anonymous@Context.');
-		// expect(warn).to.contain('A document warn. [anonymous@Context.');
+	it('Should return a properly formatted document warn log.', function () {
+
+		var elementTarget = new ElementTarget();
+		elementTarget._warn('A document log. [anonymous@Context.');
+		expect(elementTarget._element.innerHTML).to.contain('A document log. [anonymous@Context.');
+		expect(elementTarget._element.className).to.contain('warn');
 	});
 
 	// Info
-	it('Should return a properly formatted document info.', function () {
-		var elementTarget = new ElementTarget({
-				target: 'document'
-			}),
-			info = elementTarget.info('A document info. [anonymous@Context.');
-		// expect(info).to.contain('A document info. [anonymous@Context.');
+	it('Should return a properly formatted document info log.', function () {
+
+		var elementTarget = new ElementTarget();
+		elementTarget._info('A document log. [anonymous@Context.');
+		expect(elementTarget._element.innerHTML).to.contain('A document log. [anonymous@Context.');
+		expect(elementTarget._element.className).to.contain('info');
 	});
 
 	// Debug
-	it('Should return a properly formatted document debug.', function () {
-		var elementTarget = new ElementTarget({
-				target: 'document'
-			}),
-			debug = elementTarget.debug('A document debug. [anonymous@Context.');
-		// expect(debug).to.contain('A document debug. [anonymous@Context.');
+	it('Should return a properly formatted document debug log.', function () {
+
+		var elementTarget = new ElementTarget();
+		elementTarget._debug('A document log. [anonymous@Context.');
+		expect(elementTarget._element.innerHTML).to.contain('A document log. [anonymous@Context.');
+		expect(elementTarget._element.className).to.contain('debug');
 	});
 
 	// Table
-	it('Should return a properly formatted document table.', function () {
-		var elementTarget = new ElementTarget({
-				target: 'document'
-			}),
-			table = elementTarget.table('A document table. [anonymous@Context.');
-		// expect(table).to.contain('A document table. [anonymous@Context.');
-	});*/
+	it('Should return a properly formatted document table log.', function () {
+
+		var elementTarget = new ElementTarget();
+		elementTarget._table('A document log. [anonymous@Context.');
+		expect(elementTarget._element.innerHTML).to.contain('A document log. [anonymous@Context.');
+		expect(elementTarget._element.className).to.contain('table');
+	});
 });

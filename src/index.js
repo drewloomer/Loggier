@@ -12,12 +12,12 @@ function Loggier (params) {
 
 	// Target
 	if (params.target) {
-		this.setTarget(params.target);
+		this.target(params.target);
 	}
 
 	// Logging element
 	if (params.element) {
-		this.setElement(params.element);
+		this.element(params.element);
 	}
 }
 
@@ -115,7 +115,7 @@ Loggier.prototype = {
 		}
 
 		// Write method based on target
-		return this.getTarget().write(args, method);
+		return this.target().write(args, method);
 	},
 
 
@@ -131,37 +131,34 @@ Loggier.prototype = {
 
 
 	/**
-	 * Get the current target
+	 * Set or get the current target
+	 * @param {String} name
 	 * @return {Object}
 	 */
-	getTarget: function () {
+	target: function (name) {
 
-		if (this._targets.hasOwnProperty(this._targetId)) {
-			return this._targets[this._targetId];
-		}
-	},
-
-
-	/**
-	 * Set the current target
-	 * @param {String} name
-	 */
-	setTarget: function (name) {
-
-		if (this._targets.hasOwnProperty(name)) {
+		if (name !== undefined && this._targets.hasOwnProperty(name)) {
 			this._targetId = name;
 		}
+
+		return this._targets[this._targetId];
 	},
 
 
 	/**
-	 * Set the element
+	 * Set or get the element
 	 * @param {Object} el
+	 * @return {Object}
 	 */
-	setElement: function (el) {
+	element: function (el) {
 
 		if (this._targetId === 'element') {
-			this.getTarget().setElement(el);
+
+			if (el !== undefined) {
+				return this.target().element(el);
+			}
+
+			return this.target().element();
 		}
 	},
 
@@ -169,6 +166,7 @@ Loggier.prototype = {
 	/**
 	 * Set or get the log level
 	 * @param {String} levelName
+	 * @return {Number}
 	 */
 	logLevel: function (levelName) {
 

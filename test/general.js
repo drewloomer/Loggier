@@ -18,7 +18,7 @@ describe('General tests.', function () {
 				element: el
 			});
 		expect(loggier._targetId).to.equal('element');
-		expect(loggier.getTarget()._element).to.equal(el);
+		expect(loggier.target()._element).to.equal(el);
 	});
 
 
@@ -44,21 +44,21 @@ describe('General tests.', function () {
 		// Set the target to element
 		it('Should set the target to be the element.', function () {
 			var loggier = new Loggier();
-			loggier.setTarget('element');
+			loggier.target('element');
 			expect(loggier._targetId).to.equal('element');
 		});
 
 		// Set the target to fake
 		it('Should not set the target to be the fake.', function () {
 			var loggier = new Loggier();
-			loggier.setTarget('fake');
+			loggier.target('fake');
 			expect(loggier._targetId).to.equal('console');
 		});
 
 		// Set the target to console
 		it('Should set the target to be the console.', function () {
 			var loggier = new Loggier();
-			loggier.setTarget('console');
+			loggier.target('console');
 			expect(loggier._targetId).to.equal('console');
 		});
 	});
@@ -67,9 +67,9 @@ describe('General tests.', function () {
 	// Get the logging target
 	it('Should get the logging target.', function () {
 		var loggier = new Loggier();
-		expect(loggier.getTarget()).to.equal(loggier._targets['console']);
-		loggier.setTarget('element');
-		expect(loggier.getTarget()).to.equal(loggier._targets['element']);
+		expect(loggier.target()).to.equal(loggier._targets['console']);
+		loggier.target('element');
+		expect(loggier.target()).to.equal(loggier._targets['element']);
 	});
 
 
@@ -80,18 +80,18 @@ describe('General tests.', function () {
 		it('Should set the logging element.', function () {
 			var el = cheerio('<div />'),
 				loggier = new Loggier();
-			loggier.setTarget('element');
-			loggier.setElement(el);
+			loggier.target('element');
+			loggier.element(el);
 			expect(loggier._targetId).to.equal('element');
-			expect(loggier.getTarget()._element).to.equal(el);
+			expect(loggier.target()._element).to.equal(el);
 		});
 
 		// Fail to set the logging element
 		it('Should not set the logging element because we aren\'t logging to an element.', function () {
 			var el = cheerio('<div />'),
 				loggier = new Loggier();
-			loggier.setElement(el);
-			expect(loggier.getTarget()._element).to.not.equal(el);
+			loggier.element(el);
+			expect(loggier.target()._element).to.not.equal(el);
 		});
 	});
 
