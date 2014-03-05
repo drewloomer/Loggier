@@ -144,7 +144,7 @@ Loggier.prototype = {
 	_buildStackInfoString: function (params) {
 
 		// console.log(__filename, params);
-		return '(' + params.method + '@' + params.file + ':' + params.line + (params.character !== undefined ? ':' + params.character : '') + ')';
+		return params.method + '@' + params.file + ':' + params.line + (params.character !== undefined ? ':' + params.character : '');
 	},
 
 

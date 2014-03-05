@@ -276,10 +276,11 @@ ElementTarget.prototype = {
 		this._element = document.createElement('div');
 
 		// Set element properties
-		this._element.className = 'loggier';
+		this._element.className = 'loggier generated';
 
 		// Append it to the document
 		document.body.insertBefore(this._element, document.body.firstChild);
+		document.body.className += ' loggier-generated';
 
 		return this._element;
 	},

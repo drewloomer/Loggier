@@ -58,7 +58,7 @@ StackParser.prototype = {
 
 		// Parse the 6th line of the stack trace to get line info
 		var line = stack.split('\n')[5],
-			info = line.match(/(?:at\s)(?:([^\(]{1})(?:\s\()(.*)|()()(.*)|()()(<anonymous>))(\:[0-9]{1,})(\:[0-9]{1,})/);
+			info = line.match(/(?:at\s)(?:([^\(]{1,})(?:\s\()(.*)|()()(.*)|()()(<anonymous>))(\:[0-9]{1,})(\:[0-9]{1,})/);
 
 		// If there is no info, our regex failed because of bad stack data
 		if (!info) {

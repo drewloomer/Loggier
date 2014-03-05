@@ -29,7 +29,7 @@ describe('Internal methods', function () {
 				character: 14
 			});
 
-		expect(str).to.equal('(testMethodName@https://localhost/test/scripts/file.js:562:14)');
+		expect(str).to.equal('testMethodName@https://localhost/test/scripts/file.js:562:14');
 	});
 
 	// Add a class to the body

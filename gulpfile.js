@@ -49,7 +49,7 @@ gulp.task('test', function () {
 
 
 // Browserify
-gulp.task('browserify', ['clean', 'test'], function () {
+gulp.task('browserify', ['clean'], function () {
 
 	console.log('Browserifying scripts...');
 
@@ -112,8 +112,11 @@ gulp.task('stylus', ['clean'], function () {
 
 	console.log('Stylus');
 	gulp.src(source + '/index.styl')
-		.pipe(stylus())
-		.pipe(gulp.dest(dest));
+		.pipe(stylus({
+			use: ['nib']
+		}))
+		.pipe(gulp.dest(dest))
+		.pipe(livereload(lr));
 });
 
 
@@ -161,7 +164,7 @@ gulp.task('dev', ['default', 'server'], function () {
 		}
 
 		// Watch files
-		gulp.watch(source + '/**', ['default']);
+		gulp.watch(source + '/**/*', ['clean', 'browserify', 'usemin', 'stylus', 'copy']);
 	});
 });
 
