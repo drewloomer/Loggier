@@ -4,7 +4,16 @@
  */
 function ElementTarget (params) {
 
+	this._element = undefined;
+	this._elementSetup = false;
 }
+
+
+/**
+ * On click method placeholder
+ * @type {Function}
+ */
+var onClick;
 
 
 /**
@@ -24,6 +33,13 @@ ElementTarget.prototype = {
 	 * @type {Mixed}
 	 */
 	_element: undefined,
+
+
+	/**
+	 * Has the element been setup?
+	 * @type {Boolean}
+	 */
+	_elementSetup: false,
 
 
 	/**
@@ -157,17 +173,17 @@ ElementTarget.prototype = {
 		var params = arguments,
 			stackInfo = Array.prototype.pop.call(params);
 
-		// Content string
-		for (var i = 0; i < params.length; i+=1) {
-			el.appendChild(this._buildContent(params[i]));
-		}
-
 		// Info string
 		info.innerHTML = stackInfo;
 		info.className = 'info';
 
 		// Add children to the element
 		el.appendChild(info);
+
+		// Content string
+		for (var i = 0; i < params.length; i+=1) {
+			el.appendChild(this._buildContent(params[i]));
+		}
 
 		// Add the element
 		el.className = 'log';
@@ -252,6 +268,11 @@ ElementTarget.prototype = {
 	 */
 	_checkElement: function () {
 
+		// Make sure we've set up the element
+		if (!this._elementSetup) {
+			this._setupElement();
+		}
+
 		// Return the element if we have it
 		if (this._element) {
 			return this._element;
@@ -282,7 +303,57 @@ ElementTarget.prototype = {
 		document.body.insertBefore(this._element, document.body.firstChild);
 		document.body.className += ' loggier-generated';
 
+		// Setup the element
+		this._setupElement();
+
 		return this._element;
+	},
+
+
+	/**
+	 * Setup the element - adding event listeners
+	 */
+	_setupElement: function () {
+
+		// Can't do this with no element
+		if (!this._element || this._elementSetup) {
+			return;
+		}
+
+		// Listen for clicks
+		onClick = this._onClick.bind(this);
+		this._element.addEventListener('click', onClick);
+
+		// We're setup
+		this._elementSetup = true;
+	},
+
+
+	/**
+	 * Cleanup the element - removing event listeners
+	 */
+	_cleanupElement: function () {
+
+		// Can't do this with no element
+		if (!this._element || !this._elementSetup) {
+			return;
+		}
+
+		// Stop listening for clicks
+		this._element.removeEventListener('click', onClick);
+
+		// We're not setup
+		this._elementSetup = false;
+	},
+
+
+	/**
+	 * When the element is clicked
+	 * @param {Object} e
+	 */
+	_onClick: function (e) {
+
+		console.log(e);
 	},
 
 
@@ -320,7 +391,11 @@ ElementTarget.prototype = {
 	 */
 	element: function (el) {
 
+		console.log('here');
 		if (el !== undefined) {
+			if (this._element) {
+				this._cleanupElement();
+			}
 			this._element = el;
 		}
 

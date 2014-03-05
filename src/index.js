@@ -1,4 +1,5 @@
-var ConsoleTarget = require('./targets/console'),
+var normalize = require('./helpers/normalize'),
+	ConsoleTarget = require('./targets/console'),
 	ElementTarget = require('./targets/element'),
 	StackParser = require('./helpers/stack-parser');
 
@@ -143,8 +144,8 @@ Loggier.prototype = {
 	 */
 	_buildStackInfoString: function (params) {
 
-		// console.log(__filename, params);
-		return params.method + '@' + params.file + ':' + params.line + (params.character !== undefined ? ':' + params.character : '');
+		var location = window.location.protocol + '//' + window.location.host + '/';
+		return (params.method + '@' + params.file + ':' + params.line + (params.character !== undefined ? ':' + params.character : '')).replace(location, '');
 	},
 
 
@@ -171,7 +172,6 @@ Loggier.prototype = {
 		var className = document.body.className,
 			present = className.indexOf(this._enabledClassName);
 
-		console.log(present);
 		if (present !== -1) {
 			className = className.replace(this._enabledClassName, '', 'gi');
 			document.body.className = className;

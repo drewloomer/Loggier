@@ -22,6 +22,8 @@ describe('Element target', function () {
 
 		// Stub the appendChild method
 		div.appendChild = function (child) { this.append(child); };
+		div.addEventListener = function (event, callback) { this['on' + event] = callback; };
+		div.removeEventListener = function (event, callback) { };
 
 		// Stub the insertBefore method
 		body.insertBefore = function (el) { return el; };
@@ -31,6 +33,8 @@ describe('Element target', function () {
 			createElement: function (name) {
 				var el = cheerio('<' + name + '></' + name + '>');
 				el.appendChild = function (child) { child.html(child.innerHTML); this.append(child); };
+				el.addEventListener = function (event, callback) { this[('on' + event)] = callback; };
+				el.removeEventListener = function (event, callback) { };
 				el.html = function (html) { if (html) { return cheerio.prototype.html.apply(this, arguments); } return this.innerHTML || cheerio.prototype.html.apply(this); };
 				return el;
 			},
@@ -65,6 +69,28 @@ describe('Element target', function () {
 		expect(el).to.not.equal(undefined);
 	});
 
+	// Setup an element's event listeners
+	it('Should setup an element\'s event listeners.', function () {
+
+		// New elementTarget
+		var elementTarget = new ElementTarget();
+		elementTarget._createElement();
+		elementTarget._setupElement();
+
+		expect(elementTarget._elementSetup).to.equal(true);
+	});
+
+	// Remove an element's event listeners
+	it('Should cleanup an element\'s event listeners.', function () {
+
+		// New elementTarget
+		var elementTarget = new ElementTarget();
+		elementTarget._createElement();
+		elementTarget._cleanupElement();
+
+		expect(elementTarget._elementSetup).to.equal(false);
+	});
+
 	// Check that there is an element and create one if there isn't
 	it('Should check that there is an element and create one if there is not.', function () {
 
@@ -80,8 +106,9 @@ describe('Element target', function () {
 	it('Should set the logging element.', function () {
 		var el = cheerio('<div />'),
 			elementTarget = new ElementTarget();
+
 		elementTarget.element(el);
-		expect(elementTarget._element).to.equal(el);
+		expect(elementTarget.element()).to.not.equal(undefined);
 	});
 
 	// Build a content element given any data type

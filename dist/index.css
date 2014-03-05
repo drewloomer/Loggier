@@ -31,6 +31,7 @@ body.loggier-enabled.loggier-generated .loggier {
   box-sizing: border-box;
   float: left;
   padding: 3px 8px;
+  position: relative;
   width: 100%;
 }
 .loggier .log:nth-child(2n) {
@@ -42,11 +43,11 @@ body.loggier-enabled.loggier-generated .loggier {
 .loggier .log .content {
   float: left;
 }
-.loggier .log .content:before {
+.loggier .log .content:after {
   content: ',';
   margin-right: 5px;
 }
-.loggier .log .content:first-child:before {
+.loggier .log .content:last-child:after {
   content: '';
   margin: 0;
 }

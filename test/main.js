@@ -19,6 +19,19 @@ describe('Loggier', function () {
 		document = {
 			body: body[0]
 		};
+
+		window = {
+			location: {
+				hash: "",
+				host: "localhost:9000",
+				hostname: "localhost",
+				href: "http://localhost:9000/",
+				origin: "http://localhost:9000",
+				pathname: "/",
+				port: "9000",
+				protocol: "http:"
+			}
+		};
 	});
 
 	var helpers = {

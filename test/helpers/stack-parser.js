@@ -15,8 +15,8 @@ describe('Stack parser methods', function () {
 		var stackParser = new StackParser(),
 			getInfo = stackParser.getInfo();
 		expect(getInfo).to.include.keys('method', 'file', 'line', 'character');
-		expect(getInfo.method).to.equal('anonymous');
-		expect(getInfo.file).to.contain('Runner.runTest');
+		expect(getInfo.method).to.equal('Runner.runTest');
+		expect(getInfo.file).to.contain('runner.js');
 		expect(getInfo.line).to.be.a('number');
 		expect(getInfo.character).to.be.a('number');
 	});
