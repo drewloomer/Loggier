@@ -74,31 +74,97 @@ body.loggier-enabled.loggier-generated
 
 
 		// Objects
+		> .object
+			font-size 1.1em
+			margin-left 0 !important
+
 		.object
 			cursor pointer
+			font-family monospace
+			margin-left 5px
+			position relative
 
 
 			// Object row
 			.row
 				display none
+				float left
+				clear left
+				padding-left 8px
+				position relative
 
 
 				// Key
 				.key
+					color $dark_gray
+					float left
+
+
 					&:after
 						content ':'
 						margin-right 5px
 
 				// Value
-				&:before
-					content "> {"
+				.value
+					float left
 
-				&:after
-					content "}"
-
+				// Show the first
 				&:first-child
 					display inline
 
+
+					.value:after
+						content '\2026}'
+
+			// Spin-down
+			&:before
+				background-image url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAJCAYAAAD6reaeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDIxIDc5LjE1NDkxMSwgMjAxMy8xMC8yOS0xMTo0NzoxNiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDowMkJDNUY2MkE2MjExMUUzODlDNkExRDBENjg2MUQyNCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDowMkJDNUY2M0E2MjExMUUzODlDNkExRDBENjg2MUQyNCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjAyQkM1RjYwQTYyMTExRTM4OUM2QTFEMEQ2ODYxRDI0IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjAyQkM1RjYxQTYyMTExRTM4OUM2QTFEMEQ2ODYxRDI0Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+XoEulwAAADNJREFUeNpi7Ojo+M/AwMDIgASYoPR/bIIoEsiCcAl0QbAENkFGdEFGdO2M6BahuBMgwADTQwaqO5+EOwAAAABJRU5ErkJggg==')
+				background-repeat no-repeat
+				background-position 0 0
+				content ''
+				height 9px
+				left 0px
+				padding-left 8px
+				position absolute
+				top 5px
+				transform-origin 2px 4px
+				transition-property transform
+				transition-duration 200ms
+				width 9px
+
+			// Don't show ... if there is only one element
+			&[data-length='1']
+				.row:first-child:after
+					content ''
+
+
+			// Expanded
+			&.expand
+
+				// Show all rows that are direct descendents
+				> .row
+					display inline
+
+
+					// Don't show ...
+					&:first-child:after
+						content ''
+
+					// Key
+					.key
+						&:before
+							content '{'
+
+
+
+					// Value
+					.value
+						&:after
+							content ','
+
+				// Rotate the spin-down
+				&:before
+					transform rotate(90deg)
 
 		// Stack trace info
 		.info

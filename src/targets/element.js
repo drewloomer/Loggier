@@ -67,7 +67,7 @@ ElementTarget.prototype = {
 				break;
 		}
 
-		// Set the class name
+		// Set properties
 		el.className = className + ' ' + type;
 
 		return el;
@@ -93,6 +93,7 @@ ElementTarget.prototype = {
 			}
 		}
 
+		// Set properties
 		el.className = 'object';
 
 		return el;
@@ -149,7 +150,7 @@ ElementTarget.prototype = {
 				break;
 		}
 
-		el.className = type;
+		el.className = 'value ' + type;
 
 		return el;
 	},
@@ -320,9 +321,14 @@ ElementTarget.prototype = {
 			return;
 		}
 
-		// Listen for clicks
+		// Listen for clicks on the whole logger
 		onClick = this._onClick.bind(this);
-		this._element.addEventListener('click', onClick);
+		if (this._element.addEventListener) {
+			this._element.addEventListener('click', onClick, false);
+		}
+		else {
+			this._element.attachEvent('onclick', onClick);
+		}
 
 		// We're setup
 		this._elementSetup = true;
@@ -340,10 +346,54 @@ ElementTarget.prototype = {
 		}
 
 		// Stop listening for clicks
-		this._element.removeEventListener('click', onClick);
+		if (this._element.addEventListener) {
+			this._element.removeEventListener('click', onClick, false);
+		}
+		else {
+			this._element.detachEvent('onclick', onClick);
+		}
 
 		// We're not setup
 		this._elementSetup = false;
+	},
+
+
+	/**
+	 * Is this an object element or does it have a parent that is one?
+	 * @param {Object} el
+	 * @return {Mixed} [description]
+	 */
+	_isOrHasObjectParent: function (el) {
+
+		if (!el || !el.className) {
+			return false;
+		}
+
+		if (el.className.indexOf('object') !== -1) {
+			return el;
+		}
+		else if (el.parentNode) {
+			return this._isOrHasObjectParent(el.parentNode);
+		}
+		else {
+			return false;
+		}
+	},
+
+
+	/**
+	 * Toggle an object being open or closed
+	 * @param {Object} el
+	 */
+	_toggleObject: function (el) {
+
+		// Not expanded
+		if (el.className.indexOf('expand') === -1) {
+			el.className = el.className + ' expand';
+		}
+		else {
+			el.className = el.className.replace('expand', '').replace(/^\s+|\s+$/g,'');
+		}
 	},
 
 
@@ -353,7 +403,11 @@ ElementTarget.prototype = {
 	 */
 	_onClick: function (e) {
 
-		console.log(e);
+		var el = this._isOrHasObjectParent(e.target);
+
+		if (el) {
+			this._toggleObject(el);
+		}
 	},
 
 
