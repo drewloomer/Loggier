@@ -75,10 +75,10 @@ ElementTarget.prototype = {
 
 
 	/**
-	 * Build a content element from a hash
+	 * Build a content element from an array
 	 * @param {Object} obj
 	 */
-	_buildObjectContent: function (obj) {
+	_buildArrayContent: function (obj) {
 
 		var el = document.createElement('span'),
 			has = Object.prototype.hasOwnProperty,
@@ -95,6 +95,40 @@ ElementTarget.prototype = {
 
 		// Set properties
 		el.className = 'object';
+
+		return el;
+	},
+
+
+	/**
+	 * Build a content element from a hash
+	 * @param {Object} obj
+	 */
+	_buildObjectContent: function (obj) {
+
+		if (obj instanceof Array) {
+			return this._buildArrayContent(obj);
+		}
+
+		var el = document.createElement('span'),
+			has = Object.prototype.hasOwnProperty,
+			key,
+			i = 0;
+
+		// Loop
+		for (key in obj) {
+
+			// Make sure we don't bother with the prototype
+			if (has.call(obj, key)) {
+				el.appendChild(this._buildObjectContentRow(obj[key], key));
+			}
+
+			i+=1;
+		}
+
+		// Set properties
+		el.className = 'object';
+		el.setAttribute('data-length', i);
 
 		return el;
 	},

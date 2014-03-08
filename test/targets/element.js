@@ -122,6 +122,9 @@ describe('Element target', function () {
 
 		el = elementTarget._buildContent({key: 'value', key2: {nestedKey: 'nestedValue'}});
 		expect(el.html()).to.contain('nestedKey');
+
+		el = elementTarget._buildContent([0, 1, 2, 4]);
+		expect(el.html()).to.contain('nestedKey');
 	});
 
 	// Write

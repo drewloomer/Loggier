@@ -1,6 +1,8 @@
 @import 'nib'
 
 $black = #222222
+$blue = #0c71e2
+$yellow = #bca523
 $dark_gray = #777777
 $light_gray = #e8e8e8
 $lightest_gray = #fcfcfc
@@ -72,11 +74,24 @@ body.loggier-enabled.loggier-generated
 				content ''
 				margin 0
 
+		// Number
+		.number
+			color $blue
+
+		// Boolean
+		.boolean
+			color $yellow
 
 		// Objects
 		> .object
 			font-size 1.1em
 			margin-left 0 !important
+
+
+			// Closing bracket
+			&:after
+				content '}' !important
+				float left
 
 		.object
 			cursor pointer
@@ -86,7 +101,7 @@ body.loggier-enabled.loggier-generated
 
 
 			// Object row
-			.row
+			> .row
 				display none
 				float left
 				clear left
@@ -95,7 +110,7 @@ body.loggier-enabled.loggier-generated
 
 
 				// Key
-				.key
+				> .key
 					color $dark_gray
 					float left
 
@@ -105,16 +120,31 @@ body.loggier-enabled.loggier-generated
 						margin-right 5px
 
 				// Value
-				.value
+				> .value
 					float left
+
+
+					&.string
+						&:before
+							content '"'
+						&:after
+							content '"'
 
 				// Show the first
 				&:first-child
 					display inline
 
 
-					.value:after
-						content '\2026}'
+					&:before
+						content '{'
+						float left
+
+					> .value
+						&:after
+							content '\2026'
+
+						&.string:after
+							content '"\2026'
 
 			// Spin-down
 			&:before
@@ -132,10 +162,15 @@ body.loggier-enabled.loggier-generated
 				transition-duration 200ms
 				width 9px
 
+			// Closing bracket
+			&:after
+				content '}'
+				float left
+
 			// Don't show ... if there is only one element
 			&[data-length='1']
-				.row:first-child:after
-					content ''
+				> .row:first-child > .value:after
+					// content ''
 
 
 			// Expanded
@@ -144,27 +179,50 @@ body.loggier-enabled.loggier-generated
 				// Show all rows that are direct descendents
 				> .row
 					display inline
+					margin-left 10px
 
 
-					// Don't show ...
-					&:first-child:after
-						content ''
-
-					// Key
-					.key
+					&:first-child
+						// Ensure line break
 						&:before
-							content '{'
+							display block
+							margin-left -10px
+							width 100%
 
-
+						// Don't show ...
+						> &:after
+							content ''
 
 					// Value
-					.value
+					> .value
 						&:after
 							content ','
+							float right
+						&.string:after
+							content '",'
+
+					// No comma after the last
+					&:last-child
+						> .value
+							&:after
+								content ''
+							&.string:after
+								content '"'
+
+						> .value.object
+							&:after
+								content '}'
+								float left
 
 				// Rotate the spin-down
 				&:before
 					transform rotate(90deg)
+
+				// Line break on the closing bracket
+				&:after
+					display block
+					margin-left 10px
+					width 100%
 
 		// Stack trace info
 		.info

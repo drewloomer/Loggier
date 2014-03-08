@@ -51,9 +51,19 @@ body.loggier-enabled.loggier-generated .loggier {
   content: '';
   margin: 0;
 }
+.loggier .log .number {
+  color: #0c71e2;
+}
+.loggier .log .boolean {
+  color: #bca523;
+}
 .loggier .log > .object {
   font-size: 1.1em;
   margin-left: 0 !important;
+}
+.loggier .log > .object:after {
+  content: '}' !important;
+  float: left;
 }
 .loggier .log .object {
   cursor: pointer;
@@ -61,29 +71,42 @@ body.loggier-enabled.loggier-generated .loggier {
   margin-left: 5px;
   position: relative;
 }
-.loggier .log .object .row {
+.loggier .log .object > .row {
   display: none;
   float: left;
   clear: left;
   padding-left: 8px;
   position: relative;
 }
-.loggier .log .object .row .key {
+.loggier .log .object > .row > .key {
   color: #777;
   float: left;
 }
-.loggier .log .object .row .key:after {
+.loggier .log .object > .row > .key:after {
   content: ':';
   margin-right: 5px;
 }
-.loggier .log .object .row .value {
+.loggier .log .object > .row > .value {
   float: left;
 }
-.loggier .log .object .row:first-child {
+.loggier .log .object > .row > .value.string:before {
+  content: '"';
+}
+.loggier .log .object > .row > .value.string:after {
+  content: '"';
+}
+.loggier .log .object > .row:first-child {
   display: inline;
 }
-.loggier .log .object .row:first-child .value:after {
-  content: '\2026}';
+.loggier .log .object > .row:first-child:before {
+  content: '{';
+  float: left;
+}
+.loggier .log .object > .row:first-child > .value:after {
+  content: '\2026';
+}
+.loggier .log .object > .row:first-child > .value.string:after {
+  content: '"\2026';
 }
 .loggier .log .object:before {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAJCAYAAAD6reaeAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDIxIDc5LjE1NDkxMSwgMjAxMy8xMC8yOS0xMTo0NzoxNiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDowMkJDNUY2MkE2MjExMUUzODlDNkExRDBENjg2MUQyNCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDowMkJDNUY2M0E2MjExMUUzODlDNkExRDBENjg2MUQyNCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjAyQkM1RjYwQTYyMTExRTM4OUM2QTFEMEQ2ODYxRDI0IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjAyQkM1RjYxQTYyMTExRTM4OUM2QTFEMEQ2ODYxRDI0Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+XoEulwAAADNJREFUeNpi7Ojo+M/AwMDIgASYoPR/bIIoEsiCcAl0QbAENkFGdEFGdO2M6BahuBMgwADTQwaqO5+EOwAAAABJRU5ErkJggg==");
@@ -112,20 +135,38 @@ body.loggier-enabled.loggier-generated .loggier {
   transition-duration: 200ms;
   width: 9px;
 }
-.loggier .log .object[data-length='1'] .row:first-child:after {
-  content: '';
+.loggier .log .object:after {
+  content: '}';
+  float: left;
 }
 .loggier .log .object.expand > .row {
   display: inline;
+  margin-left: 10px;
 }
-.loggier .log .object.expand > .row:first-child:after {
+.loggier .log .object.expand > .row:first-child:before {
+  display: block;
+  margin-left: -10px;
+  width: 100%;
+}
+> .loggier .log .object.expand > .row:first-child:after {
   content: '';
 }
-.loggier .log .object.expand > .row .key:before {
-  content: '{';
-}
-.loggier .log .object.expand > .row .value:after {
+.loggier .log .object.expand > .row > .value:after {
   content: ',';
+  float: right;
+}
+.loggier .log .object.expand > .row > .value.string:after {
+  content: '",';
+}
+.loggier .log .object.expand > .row:last-child > .value:after {
+  content: '';
+}
+.loggier .log .object.expand > .row:last-child > .value.string:after {
+  content: '"';
+}
+.loggier .log .object.expand > .row:last-child > .value.object:after {
+  content: '}';
+  float: left;
 }
 .loggier .log .object.expand:before {
   -webkit-transform: rotate(90deg);
@@ -133,6 +174,11 @@ body.loggier-enabled.loggier-generated .loggier {
   -o-transform: rotate(90deg);
   -ms-transform: rotate(90deg);
   transform: rotate(90deg);
+}
+.loggier .log .object.expand:after {
+  display: block;
+  margin-left: 10px;
+  width: 100%;
 }
 .loggier .log .info {
   color: #777;

@@ -8,7 +8,12 @@ function test () {
 		key2: {
 			nestedKey: 1,
 			nestedKey2: 'nested value'
-		}
+		},
+		key3: false,
+		key4: ['an', 'array']
+	});
+	logTest.log('A general log.', 'Extra params', {
+		key: ['an', 'array']
 	});
 }
 
