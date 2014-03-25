@@ -1,5 +1,5 @@
 {
-  "name": "logger",
+  "name": "loggier",
   "version": "0.0.1",
   "author": "Drew Loomer <drew@drewloomer.com>",
   "description": "a javascript logger abstraction.",
